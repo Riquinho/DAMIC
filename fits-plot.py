@@ -73,9 +73,21 @@ def openHDU(hdulist, ext):
     histogram = plt.hist(image_corte.flat, bins=2048)
     plt.show()
 
+    #Histograma em escala log
+    histogram1 = plt.hist(image_corte.flat, bins=2048)
+    plt.yscale('log', nonposy='clip')
+    plt.show()
 
+    onedimension = image_corte.flatten() # transforma a matrix 2d em 1d 
+    mu, std = norm.fit(onedimension) #media e desvio padrao
 
+    print 'A matriz 1d do fits:',onedimension
 
+    #Formacao da gaussiana
+    xp = np.linspace(onedimension.min(),onedimension.max(), 1000)
+    p = norm.pdf(xp,mu,std)
+    plt.plot(xp, p)
+    plt.show()
 
 
     minInt = int(raw_input("Entre com o valor minimo de intensidade desejada: "))
