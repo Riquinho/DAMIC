@@ -81,7 +81,7 @@ def openHDU(hdulist, ext):
     onedimension = image_corte.flatten() # transforma a matrix 2d em 1d 
     mu, std = norm.fit(onedimension) #media e desvio padrao
 
-    print 'A matriz 1d do fits:',onedimension
+    print 'A matriz 1d do fits cortado:',onedimension
 
     #Formacao da gaussiana
     xp = np.linspace(onedimension.min(),onedimension.max(), 1000)
@@ -89,19 +89,34 @@ def openHDU(hdulist, ext):
     plt.plot(xp, p)
     plt.show()
 
+    print 'Minimo:', image_corte.min()
+    print 'Maximo:', image_corte.max()
+    print 'Media:', image_corte.mean()
+    print 'Sigma:', image_corte.std()
 
-    minInt = int(raw_input("Entre com o valor minimo de intensidade desejada: "))
-    maxInt = int(raw_input("Entre com o valor maximo de intensidade desejada: "))
+    #Somando colunas da matriz de corte (distribuicao binomial)
+    soma_corte = image_corte.sum(axis=0)
+    print (soma_corte)
 
-    trim = 1.0-float(raw_input("Entre com a porcentagem desejada de plotagem: "))
+    #linhas_corte = range(len(image_corte[0])) #numero de colunas
 
-    width = image_data.shape[1]
-    trimPixel = width*trim
-
-    plt.imshow(image_data, cmap='gray', clim=(minInt, maxInt))
-    plt.xlim(trimPixel/2.0, width-trimPixel/2.0)
-    plt.colorbar()
+    plt.plot(soma_corte)
     plt.show()
+
+
+    # possivelmente ignorar...
+    #minInt = int(raw_input("Entre com o valor minimo de intensidade desejada: "))
+    #maxInt = int(raw_input("Entre com o valor maximo de intensidade desejada: "))
+
+    #trim = 1.0-float(raw_input("Entre com a porcentagem desejada de plotagem: "))
+
+    #width = image_data.shape[1]
+    #trimPixel = width*trim
+
+    #plt.imshow(image_data, cmap='gray', clim=(minInt, maxInt))
+    #plt.xlim(trimPixel/2.0, width-trimPixel/2.0)
+    #plt.colorbar()
+    #plt.show()
  
 if not os.path.exists('imagens_fits'):
     os.makedirs('imagens_fits') #Cria a pasta

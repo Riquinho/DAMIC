@@ -8,9 +8,14 @@ print a
 b = np.resize(a, (4,6))
 
 print b
-per= int(raw_input("Digite o primeiro corte do eixo x"))
-per2= int(raw_input("Digite o primeiro corte do eixo x")) +1
-per3= int(raw_input("Digite o primeiro corte do eixo y"))
-per4= int(raw_input("Digite o primeiro corte do eixo y")) +1
+print len(b[0])
 
-print(b[per:per2,per3:per4])
+print b.sum(axis=0)
+
+
+#per= int(raw_input("Digite o primeiro corte do eixo x"))
+#per2= int(raw_input("Digite o primeiro corte do eixo x")) +1
+#per3= int(raw_input("Digite o primeiro corte do eixo y"))
+#per4= int(raw_input("Digite o primeiro corte do eixo y")) +1
+
+#print(b[per:per2,per3:per4])
