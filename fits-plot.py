@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import os
 import glob
+import sys
 
 from astropy.utils.data import download_file
 from astropy.io import fits
@@ -98,10 +99,24 @@ def openHDU(hdulist, ext):
     soma_corte = image_corte.sum(axis=0)
     print (soma_corte)
 
-    #linhas_corte = range(len(image_corte[0])) #numero de colunas
-
     plt.plot(soma_corte)
     plt.show()
+
+    #linhas_corte = range(len(soma_corte)) #numero de colunas
+    #regressao linear
+    regx = range(corte4-corte3)
+    A = np.vstack([regx, np.ones(len(regx))]).transpose()
+    print   A
+    m, c = np.linalg.lstsq(A, soma_corte)[0]
+    print(m, c)
+
+    plt.plot(regx, soma_corte, 'o', label='Original data', markersize=10)
+    plt.plot(regx, m*x + c, 'r', label='Fitted line')
+    plt.legend()
+    plt.show()
+
+
+    
 
 
     # possivelmente ignorar...
@@ -124,7 +139,7 @@ if not os.path.exists('imagens_fits'):
 resposta = 'n'
 while resposta == 'n':
     print('Por favor mova os arquivos fits para a pasta images_fits')
-    resposta = raw_input('As imagens foram movidas? [s/n] ')
+    resposta = sys.argv[1] #raw_input('As imagens foram movidas? [s/n] ')
     if resposta == 's':
         os.chdir('imagens_fits') #entra na pasta
         print("id: nome")
@@ -132,14 +147,14 @@ while resposta == 'n':
         for i in range(len(dirlist)):
             print(i, ": ", dirlist[i]) #Lista a conteudo
         
-        image_file = raw_input('Escreva o nome ou a id do arquivo fits: ')
+        image_file = sys.argv[2] #raw_input('Escreva o nome ou a id do arquivo fits: ')
         if image_file.isdigit():
             image_file = dirlist[int(image_file)]
      
         hdu_list = fits.open(image_file)
         hdu_list.info()
     
-        ext = int(raw_input("Qual extensao quer abrir? "))
+        ext = int(sys.argv[3]) # int(raw_input("Qual extensao quer abrir? "))
         openHDU(hdu_list, ext)
     
         hdu_list.close()
