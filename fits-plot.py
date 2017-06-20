@@ -11,6 +11,9 @@ from astropy.io import fits
 
 from astropy.modeling.models import Gaussian1D
 
+#Instrucoes de utilizacao do programa.
+# python fits-plot.py s nomedoarquivo extensao
+
 def openHDU(hdulist, ext):
     image_data = hdu_list[ext].data
 
@@ -104,17 +107,24 @@ def openHDU(hdulist, ext):
 
     #linhas_corte = range(len(soma_corte)) #numero de colunas
     #regressao linear
-    regx = range(corte4-corte3)
-    A = np.vstack([regx, np.ones(len(regx))]).transpose()
-    print   A
-    m, c = np.linalg.lstsq(A, soma_corte)[0]
-    print(m, c)
+    #regx = range(corte4-corte3)
+    #A = np.vstack([regx, np.ones(len(regx))]).transpose()
+    #print   A
+    #m, c = np.linalg.lstsq(A, soma_corte)[0]
+    #print(m, c)
 
-    plt.plot(regx, soma_corte, 'o', label='Original data', markersize=10)
-    plt.plot(regx, m*x + c, 'r', label='Fitted line')
-    plt.legend()
-    plt.show()
+    #plt.plot(regx, soma_corte, 'o', label='Original data', markersize=10)
+    #plt.plot(regx, m*x + c, 'r', label='Fitted line')
+    #plt.legend()
+    #plt.show()
 
+    arq = open("dados.txt", "w")
+    arq.write("Minimo:")
+    arq.write(str(image_corte.min()))
+    arq.write("\n") #para inserir quebra de linha
+    arq.write("Maximo:")
+    arq.write(str(image_corte.max()))
+    arq.close()
 
     
 
