@@ -11,6 +11,11 @@ from astropy.io import fits
 
 from astropy.modeling.models import Gaussian1D
 
+from scipy.stats import linregress
+from matplotlib import pyplot as pl
+
+
+
 #Instrucoes de utilizacao do programa.
 # python fits-plot.py s nomedoarquivo extensao
 
@@ -105,18 +110,47 @@ def openHDU(hdulist, ext):
     plt.plot(soma_corte)
     plt.show()
 
-    #linhas_corte = range(len(soma_corte)) #numero de colunas
-    #regressao linear
-    #regx = range(corte4-corte3)
-    #A = np.vstack([regx, np.ones(len(regx))]).transpose()
-    #print   A
-    #m, c = np.linalg.lstsq(A, soma_corte)[0]
-    #print(m, c)
+    #Regressao linear
+    y= soma_corte
+    x= range(len(soma_corte))
+    m, b, R, p, SEm = linregress(x, y)
 
-    #plt.plot(regx, soma_corte, 'o', label='Original data', markersize=10)
-    #plt.plot(regx, m*x + c, 'r', label='Fitted line')
-    #plt.legend()
-    #plt.show()
+    def lin_regression(x, y):
+    #Simple linear regression (y = m * x + b + error).
+        m, b, R, p, SEm = linregress(x, y)
+
+    # need to compute SEb, linregress only computes SEm
+        n = len(x)
+        SSx = np.var(x, ddof=1) * (n-1)  # this is sum( (x - mean(x))**2 )
+        SEb2 = SEm**2 * (SSx/n + np.mean(x)**2)
+        SEb = SEb2**0.5
+
+        return m, b, SEm, SEb, R, p
+
+    m, b, Sm, Sb, R, p = lin_regression(x, y)
+
+    print('m = {:>.4g} +- {:6.4f}'.format(m, Sm))
+    print('b = {:>.4g} +- {:6.4f}\n'.format(b, Sb))
+
+    print('R2 = {:7.5f}'.format(R**2))
+    print('p of test F : {:<8.6f}'.format(p))
+
+    pl.plot(x,y, 'o')
+    pl.xlim(0,None)
+    pl.ylim(0, None)
+
+    # desenho da recta, dados 2 pontos extremos
+    # escolhemos a origem e o max(x)
+    x2 = np.array([0, max(x)])
+
+    pl.plot(x2, m * x2 + b, '-')
+
+    # Anotacao sobre o grafico:
+    ptxt = 'm = {:>.4g} +- {:6.4f}\nb = {:>.4g} +- {:6.4f}\nR2 = {:7.5f}'
+
+    t = pl.text(0.5, 4, ptxt.format(m, Sm, b, Sb, R**2), fontsize=14)
+    pl.show()
+    
 
     arq = open("dados.txt", "w")
     arq.write("Minimo:")
@@ -127,21 +161,6 @@ def openHDU(hdulist, ext):
     arq.close()
 
     
-
-
-    # possivelmente ignorar...
-    #minInt = int(raw_input("Entre com o valor minimo de intensidade desejada: "))
-    #maxInt = int(raw_input("Entre com o valor maximo de intensidade desejada: "))
-
-    #trim = 1.0-float(raw_input("Entre com a porcentagem desejada de plotagem: "))
-
-    #width = image_data.shape[1]
-    #trimPixel = width*trim
-
-    #plt.imshow(image_data, cmap='gray', clim=(minInt, maxInt))
-    #plt.xlim(trimPixel/2.0, width-trimPixel/2.0)
-    #plt.colorbar()
-    #plt.show()
  
 if not os.path.exists('imagens_fits'):
     os.makedirs('imagens_fits') #Cria a pasta
