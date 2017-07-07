@@ -88,11 +88,33 @@ def gaussianFits(image_data):
     corteFits(image_data)
 
 def corteFits(image_data):
-    #Recorte do fits
-    corte= int(raw_input("\nDigite a primeira coordenada de corte do eixo y: "))
-    corte2= int(raw_input("Digite a segunda coordenada de corte do eixo y: ")) +1
-    corte3= int(raw_input("Digite a primeira coordenada de corte do eixo x: "))
-    corte4= int(raw_input("Digite a segunda coordenada de corte do eixo x: ")) +1
+    tipocorte = raw_input("Corte no Fitz customizado ou padronizado (c / p): ")
+    
+    if tipocorte == "p":
+        #Corte padronizado
+        divisao = raw_input("Informe o numero de fatias: ")
+        corte = 0
+        corte2 = image_data.shape[1]/int(divisao) 
+        corte3 = 0
+        corte4 = image_data.shape[0]/int(divisao)     
+    elif tipocorte == "c":
+        #Recorte do fits
+        corte= int(raw_input("\nDigite a primeira coordenada de corte do eixo y: "))
+        corte2= int(raw_input("Digite a segunda coordenada de corte do eixo y: ")) +1
+        corte3= int(raw_input("Digite a primeira coordenada de corte do eixo x: "))
+        corte4= int(raw_input("Digite a segunda coordenada de corte do eixo x: ")) +1
+    else:
+        print "Resposta invalida, considerando argumento padrao"
+
+        corte = 0
+        corte2 = 4298
+        corte3 = 4272
+        corte4 = 8544
+
+        print "Primeira coordenada no eixo y: " , corte 
+        print "Segunda coordenada no eixo y: " , corte2
+        print "Primeira coordenada no eixo x: " , corte3
+        print "Segunda coordenada no eixo x: " ,corte4
 
     image_corte = image_data[corte:corte2,corte3:corte4]
 
@@ -214,7 +236,7 @@ while resposta == 'n':
         for i in range(len(dirlist)):
             print(i, ": ", dirlist[i]) # Lista a conteudo
         
-        image_file = sys.argv[2] # raw_input('Escreva o nome ou a id do arquivo fits: ')
+        image_file = sys.argv[2] # raw_input('Escreva o nome ou a id do arquivo fits: ') (padrao arquivo dentro da pasta, mas aceita caminho externo)
         if image_file.isdigit():
             image_file = dirlist[int(image_file)]
      
