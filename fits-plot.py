@@ -77,14 +77,6 @@ def gaussianFits(image_data):
     print 'Media:', image_data.mean()
     print 'Sigma:', image_data.std()
 
-    #Lado esquerdo do fits.
-    #div = np.resize(image_data, (4298,4272))
-    #print div
-    #plt.imshow(div, cmap='gray')
-    #plt.xlim(100, 4272)
-    #plt.colorbar()
-    #plt.show()
-
     corteFits(image_data)
 
 def corteFits(image_data):
@@ -92,11 +84,35 @@ def corteFits(image_data):
     
     if tipocorte == "p":
         #Corte padronizado
+
         divisao = raw_input("Informe o numero de fatias: ")
+
+        #padronizacao do corte no eixo y para melhor visualizacao na cascata:
+        if int(divisao) == 2:
+            divisaoy = 1
+
+        elif int(divisao) == 4 or 6 or 8 or 10:
+            divisaoy = 2
+
+        elif int(divisao) == 12 or 15 or 18:
+            divisaoy = 3
+
+        elif int(divisao) == 20 or 24 or 28:
+            divisaoy = 4
+
+        elif int(divisao) == 25 or 30:
+            divisaoy = 5
+
+        elif int(divisao) == 40 or 50:
+            divisaoy = 10
+
+        divisaox = int(divisao)/divisaoy
+
         corte = 0
-        corte2 = image_data.shape[1]/int(divisao) 
+        corte2 = image_data.shape[1]/divisaoy 
         corte3 = 0
-        corte4 = image_data.shape[0]/int(divisao)     
+        corte4 = image_data.shape[0]/divisaox     
+
     elif tipocorte == "c":
         #Recorte do fits
         corte= int(raw_input("\nDigite a primeira coordenada de corte do eixo y: "))
@@ -123,6 +139,7 @@ def corteFits(image_data):
     print "-----------------------------------------------------"
 
     histogramCorte(image_corte)
+  #  cascataFits(image_data, divisao, corte, corte2, corte3, corte4)
 
 def histogramCorte(image_corte):
     #histograma imagem cortada
@@ -209,6 +226,28 @@ def linearFits(image_corte, soma_corte):
     pl.show()
         
     exportFits(image_corte)
+
+
+def cascataFits(image_data, divisao, corte, corte2, corte3, corte4):
+
+    #Passagem do corte pelo eixo x
+    for n in range(int(divisao)):
+        corte3 = corte4
+        corte4 = (image_data.shape[0]/int(divisao)) * n
+
+        image_corte = image_data[corte:corte2,corte3:corte4]
+
+        print corte
+        print corte2
+        print corte3
+        print corte4
+
+        print "\n --------------- Matriz 2D Cortada ---------------"
+        print (image_corte)
+        print "-----------------------------------------------------"
+
+        histogramCorte(image_corte)
+     
 
 def exportFits(image_corte):    
     #exportar dados para txt.
