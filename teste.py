@@ -1,50 +1,30 @@
-import numpy as np
-x = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
-y = np.array([1.0, 2.1, 2.8, 4.1, 5.2])
-
-from matplotlib import pyplot as pl
-
-pl.plot(x,y, 'o')
-pl.show()
-
-from scipy.stats import linregress
-
-m, b, R, p, SEm = linregress(x, y)
+divisao = int(raw_input("Informe o numero de fatias: "))
 
 
-def lin_regression(x, y):
-    """Simple linear regression (y = m * x + b + error)."""
-    m, b, R, p, SEm = linregress(x, y)
+if (divisao == 2):
+    divisaoy = 1
 
-    # need to compute SEb, linregress only computes SEm
-    n = len(x)
-    SSx = np.var(x, ddof=1) * (n-1)  # this is sum( (x - mean(x))**2 )
-    SEb2 = SEm**2 * (SSx/n + np.mean(x)**2)
-    SEb = SEb2**0.5
+elif (divisao == (4 or 6 or 8 or 10)):
+    divisaoy = 2
 
-    return m, b, SEm, SEb, R, p
+elif (divisao == (12 or 15 or 18)):
+    divisaoy = 3
 
-m, b, Sm, Sb, R, p = lin_regression(x, y)
+elif (divisao == (20 or 24 or 28)):
+    divisaoy = 4
 
-print('m = {:>.4g} +- {:6.4f}'.format(m, Sm))
-print('b = {:>.4g} +- {:6.4f}\n'.format(b, Sb))
+elif (divisao == (25 or 30)):
+    divisaoy = 5
 
-print('R2 = {:7.5f}'.format(R**2))
-print('p of test F : {:<8.6f}'.format(p))
+elif divisao == (40 or 50):
+    divisaoy = 10
 
+else:
+    print "Divisao nao disponivel"
+    print "Escolha entre os numeros: 2, 4, 6, 8, 10, 12, 15, 18, 20, 24, 25, 28, 30, 40, 50"
+    divisaoy = 0
 
-pl.plot(x,y, 'o')
-pl.xlim(0,None)
-pl.ylim(0, None)
+print divisao
+print type(int(divisao))
 
-# desenho da recta, dados 2 pontos extremos
-# escolhemos a origem e o max(x)
-x2 = np.array([0, max(x)])
-
-pl.plot(x2, m * x2 + b, '-')
-
-# Anotacao sobre o grafico:
-ptxt = 'm = {:>.4g} +- {:6.4f}\nb = {:>.4g} +- {:6.4f}\nR2 = {:7.5f}'
-
-t = pl.text(0.5, 4, ptxt.format(m, Sm, b, Sb, R**2), fontsize=14)
-pl.show()
+print divisaoy

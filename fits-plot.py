@@ -80,31 +80,38 @@ def gaussianFits(image_data):
     corteFits(image_data)
 
 def corteFits(image_data):
-    tipocorte = raw_input("Corte no Fitz customizado ou padronizado (c / p): ")
+    tipocorte = raw_input("\nCorte no Fitz customizado ou padronizado (c / p): ")
     
     if tipocorte == "p":
         #Corte padronizado
-
-        divisao = raw_input("Informe o numero de fatias: ")
+        print "\nNumeros de fatias customizadas aceitas: 2, 4, 6, 8, 10, 12, 15, 18, 20, 24, 25, 28, 30, 40, 50"
+        divisao = raw_input("\nInforme o numero de fatias: ")
 
         #padronizacao do corte no eixo y para melhor visualizacao na cascata:
         if int(divisao) == 2:
             divisaoy = 1
 
-        elif int(divisao) == 4 or 6 or 8 or 10:
+        elif int(divisao) == (4 or 6 or 8 or 10):
             divisaoy = 2
 
-        elif int(divisao) == 12 or 15 or 18:
+        elif int(divisao) == (12 or 15 or 18):
             divisaoy = 3
 
-        elif int(divisao) == 20 or 24 or 28:
+        elif int(divisao) == (20 or 24 or 28):
             divisaoy = 4
 
-        elif int(divisao) == 25 or 30:
+        elif int(divisao) == (25 or 30):
             divisaoy = 5
 
-        elif int(divisao) == 40 or 50:
+        elif int(divisao) == (40 or 50):
             divisaoy = 10
+
+        else:
+            print "\nDivisao abortada"
+            print "Escolha entre os numeros: 2, 4, 6, 8, 10, 12, 15, 18, 20, 24, 25, 28, 30, 40, 50"
+            divisaoy = 1
+            divisao = 1
+
 
         divisaox = int(divisao)/divisaoy
 
@@ -157,7 +164,7 @@ def gaussianCorte(image_corte):
     onedimension = image_corte.flatten() # transforma a matrix 2d em 1d 
     mu, std = norm.fit(onedimension) #media e desvio padrao
 
-    print '\n A matriz 1d do fits cortado:',onedimension
+    print '\nA matriz 1d do fits cortado:',onedimension
 
     #Formacao da gaussiana
     xp = np.linspace(onedimension.min(),onedimension.max(), 1000)
