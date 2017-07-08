@@ -108,7 +108,6 @@ def corteFits(image_data):
 
         else:
             print "\nDivisao abortada"
-            print "Escolha entre os numeros: 2, 4, 6, 8, 10, 12, 15, 18, 20, 24, 25, 28, 30, 40, 50"
             divisaoy = 1
             divisao = 1
 
