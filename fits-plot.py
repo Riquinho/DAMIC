@@ -234,7 +234,7 @@ def linearFits(image_corte, soma_corte):
     exportFits(image_corte)
 
 
-def cascataFits(image_data, divisao, corte, corte2, corte3, corte4):
+def cascataFits(image_data, divisaox, divisaoy, corte, corte2, corte3, corte4):
 
     #Passagem do corte pelo eixo x
     for n in range(int(divisao)):
